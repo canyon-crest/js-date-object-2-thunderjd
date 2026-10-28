@@ -40,19 +40,19 @@ document.getElementById("warmUpDate").innerHTML=dayName
 // Example: "4/2/2025" (no leading zeros)
 
 // STEP 6: Create a new Date object (or reuse the one from above).
-let now = newDate()
+now = new Date()
 // STEP 7: Get the month using .getMonth()
 //         IMPORTANT: .getMonth() returns 0–11 (January = 0)
 //         so you must add 1 to get the correct month number.
 let monthNumber = now.getMonth() + 1
 // STEP 8: Get the day of the month using .getDate()
-let dayNumber = now.getDate()
+let dayNum = now.getDate()
 // STEP 9: Get the year using .getFullYear()
 let year = now.getFullYear()
 // STEP 10: Build the date string: month + "/" + day + "/" + year
 //          Display it in the element with ID "myDate"
-let dateString = month + "/" + day + "/" + year
-document.getElementById("mydate").textcontext = dateString;
+let dateString = monthNumber + "/" + dayNum + "/" + year
+document.getElementById("myDate").textContent = dateString;
 
 // ============================================
 //  PART 2: Elapsed Timer
@@ -63,6 +63,7 @@ document.getElementById("mydate").textcontext = dateString;
 
 // STEP 11: Record the start time using new Date().getTime()
 //          This gives you the current time in milliseconds.
+let startTime = new Date().getTime();
 
 // STEP 12: Create a variable to hold the timer ID (for stopping later).
 //          Use setInterval() with a delay of 10 milliseconds.
@@ -71,6 +72,13 @@ document.getElementById("mydate").textcontext = dateString;
 //          b) Calculate elapsed seconds: (currentTime - startTime) / 1000
 //          c) Display the elapsed time using .toFixed(3)
 //             in the element with ID "myTimer"
+let timerId = setInterval(updateTimer, 10);
+
+function updateTimer() {
+    let currentTime = new Date().getTime();
+    let elapsedSeconds = (currentTime - startTime) / 1000;
+    document.getElementById("myTimer").innerHTML = elapsedSeconds.toFixed(3);
+}
 
 
 // ============================================
@@ -85,6 +93,7 @@ document.getElementById("mydate").textcontext = dateString;
 
 // STEP 13: Create a variable to track whether the timer is
 //          currently running (let running = true;)
+let running = true;
 
 // STEP 14: Add a click event listener to the button (ID "myBtn").
 //          Inside the listener:
@@ -97,3 +106,15 @@ document.getElementById("mydate").textcontext = dateString;
 //             - Start a new setInterval (same as STEP 12)
 //             - Change button innerHTML to "Stop"
 //             - Set running to true
+document.getElementById("myBtn").addEventListener("click", function() {
+    if (running) {
+        clearInterval(timerId);
+        document.getElementById("myBtn").innerHTML = "Start";
+        running = false;
+    } else {
+        startTime = new Date().getTime();
+        timerId = setInterval(updateTimer, 10);
+        document.getElementById("myBtn").innerHTML = "Stop";
+        running = true;
+    }
+});
